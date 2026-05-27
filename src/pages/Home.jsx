@@ -9,7 +9,7 @@ export default function Home() {
 
   const [investments, setInvestments] = useState([])
 
-  async function fetchInvestments() {
+  const fetchInvestments = async () => {
 
     const { data, error } = await supabase
       .from('investments')
@@ -62,10 +62,13 @@ export default function Home() {
 
           <InvestmentCard
             key={investment.id}
+            id={investment.id}
             title={investment.title}
-            value={`${investment.amount} ${investment.currency}`}
+            value={`${investment.amount}${investment.currency}`}
             color="#4ade80"
-          />
+            refreshInvestments={fetchInvestments}
+          />    
+          
 
         ))}
 
