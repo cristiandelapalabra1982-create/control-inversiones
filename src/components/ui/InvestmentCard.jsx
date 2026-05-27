@@ -1,4 +1,6 @@
- import { supabase } from '../../lib/supabase'
+ import { useState } from 'react'
+
+import { supabase } from '../../lib/supabase'
 
 export default function InvestmentCard({
   id,
@@ -7,6 +9,18 @@ export default function InvestmentCard({
   color,
   refreshInvestments
 }) {
+
+  const [editing, setEditing] = useState(false)
+
+  const [newTitle, setNewTitle] = useState(title)
+
+  const [newValue, setNewValue] = useState(
+    value.split(' ')[0]
+  )
+
+  const [newCurrency, setNewCurrency] = useState(
+    value.split(' ')[1]
+  )
 
   async function handleDelete() {
 
@@ -32,6 +46,30 @@ export default function InvestmentCard({
     refreshInvestments()
   }
 
+  async function handleUpdate() {
+
+    const { error } = await supabase
+      .from('investments')
+      .update({
+        title: newTitle,
+        amount: newValue,
+        currency: newCurrency
+      })
+      .eq('id', id)
+
+    if (error) {
+      alert('Error al actualizar')
+      console.log(error)
+      return
+    }
+
+    alert('Inversión actualizada')
+
+    setEditing(false)
+
+    refreshInvestments()
+  }
+
   return (
 
     <div
@@ -47,34 +85,130 @@ export default function InvestmentCard({
       }}
     >
 
-      <div className="flex justify-between items-center">
+      {!editing ? (
 
-        <div>
+        <div className="flex justify-between items-center">
 
-          <h3 className="text-xl font-semibold">
-            {title}
-          </h3>
+          <div>
 
-          <p className="text-slate-300 mt-1">
-            {value}
-          </p>
+            <h3 className="text-xl font-semibold">
+              {title}
+            </h3>
+
+            <p className="text-slate-300 mt-1">
+              {value}
+            </p>
+
+          </div>
+
+          <div className="flex gap-2">
+
+            <button
+              onClick={() => setEditing(true)}
+              className="
+                bg-blue-500
+                hover:bg-blue-600
+                px-4
+                py-2
+                rounded-xl
+              "
+            >
+              Editar
+            </button>
+
+            <button
+              onClick={handleDelete}
+              className="
+                bg-red-500
+                hover:bg-red-600
+                px-4
+                py-2
+                rounded-xl
+              "
+            >
+              Eliminar
+            </button>
+
+          </div>
 
         </div>
 
-        <button
-          onClick={handleDelete}
-          className="
-            bg-red-500
-            hover:bg-red-600
-            px-4
-            py-2
-            rounded-xl
-          "
-        >
-          Eliminar
-        </button>
+      ) : (
 
-      </div>
+        <div className="grid gap-3">
+
+          <input
+            type="text"
+            value={newTitle}
+            onChange={(e) =>
+              setNewTitle(e.target.value)
+            }
+            className="
+              bg-slate-700
+              p-3
+              rounded-xl
+            "
+          />
+
+          <input
+            type="number"
+            value={newValue}
+            onChange={(e) =>
+              setNewValue(e.target.value)
+            }
+            className="
+              bg-slate-700
+              p-3
+              rounded-xl
+            "
+          />
+
+          <input
+            type="text"
+            value={newCurrency}
+            onChange={(e) =>
+              setNewCurrency(e.target.value)
+            }
+            className="
+              bg-slate-700
+              p-3
+              rounded-xl
+            "
+          />
+
+          <div className="flex gap-2">
+
+            <button
+              onClick={handleUpdate}
+              className="
+                bg-green-500
+                hover:bg-green-600
+                px-4
+                py-2
+                rounded-xl
+              "
+            >
+              Guardar
+            </button>
+
+            <button
+              onClick={() => setEditing(false)}
+              className="
+                bg-slate-600
+                hover:bg-slate-700
+                px-4
+                py-2
+                rounded-xl
+              "
+            >
+              Cancelar
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
   )

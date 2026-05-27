@@ -1,54 +1,81 @@
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
+ import {
+  PieChart,
+  Pie,
+  Cell,
   Tooltip,
   ResponsiveContainer
 } from 'recharts'
 
-export default function PortfolioChart() {
+export default function PortfolioChart({
+  investments
+}) {
 
-  const data = [
-    { month: 'Ene', value: 420000 },
-    { month: 'Feb', value: 470000 },
-    { month: 'Mar', value: 510000 },
-    { month: 'Abr', value: 590000 },
-    { month: 'May', value: 650000 },
-    { month: 'Jun', value: 786368 },
+  const data = investments.map(
+    (investment) => ({
+      name: investment.title,
+      value: Number(investment.amount)
+    })
+  )
+
+  const COLORS = [
+    '#4ade80',
+    '#60a5fa',
+    '#f472b6',
+    '#facc15',
+    '#c084fc',
+    '#fb923c'
   ]
 
   return (
-    <div className="bg-slate-800 rounded-3xl p-5">
 
-      <h2 className="text-xl font-semibold mb-5">
-        Evolución Patrimonial
+    <div
+      className="
+        bg-slate-800
+        rounded-3xl
+        p-6
+        h-[400px]
+      "
+    >
+
+      <h2 className="text-2xl font-bold mb-4">
+        Distribución Portfolio
       </h2>
 
-      <div className="h-64">
+      <ResponsiveContainer
+        width="100%"
+        height="100%"
+      >
 
-        <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
 
-          <LineChart data={data}>
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="name"
+            outerRadius={120}
+            label
+          >
 
-            <XAxis dataKey="month" stroke="#94a3b8" />
+            {data.map((entry, index) => (
 
-            <YAxis stroke="#94a3b8" />
+              <Cell
+                key={index}
+                fill={
+                  COLORS[
+                    index % COLORS.length
+                  ]
+                }
+              />
 
-            <Tooltip />
+            ))}
 
-            <Line
-              type="monotone"
-              dataKey="value"
-              stroke="#4ade80"
-              strokeWidth={3}
-            />
+          </Pie>
 
-          </LineChart>
+          <Tooltip />
 
-        </ResponsiveContainer>
+        </PieChart>
 
-      </div>
+      </ResponsiveContainer>
 
     </div>
   )
