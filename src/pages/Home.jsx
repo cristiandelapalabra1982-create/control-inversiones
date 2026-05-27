@@ -27,34 +27,13 @@ export default function Home() {
     fetchInvestments()
   }, [])
 
-  const total = investments.reduce(
-    (acc, investment) =>
-      acc + Number(investment.amount),
-    0
-  )
-
   return (
-    <div>
 
-      <h1 className="text-3xl font-bold mb-5">
-        Inicio
+    <div className="p-6">
+
+      <h1 className="text-4xl font-bold mb-6">
+        Control de Inversiones
       </h1>
-
-      <div className="bg-slate-800 rounded-3xl p-6 mb-5">
-
-        <p className="text-slate-400">
-          Patrimonio Total
-        </p>
-
-        <h2 className="text-5xl font-bold mt-2">
-          ${total}
-        </h2>
-
-        <p className="text-green-400 mt-3">
-          Inversiones cargadas: {investments.length}
-        </p>
-
-      </div>
 
       <div className="grid gap-4">
 
@@ -64,11 +43,10 @@ export default function Home() {
             key={investment.id}
             id={investment.id}
             title={investment.title}
-            value={`${investment.amount}${investment.currency}`}
+            value={`${investment.amount} ${investment.currency}`}
             color="#4ade80"
             refreshInvestments={fetchInvestments}
-          />    
-          
+          />
 
         ))}
 
