@@ -5,6 +5,9 @@ import { supabase } from '../lib/supabase'
 import InvestmentCard from '../components/ui/InvestmentCard'
 import PortfolioChart from '../components/ui/PortfolioChart'
 import GoalCard from '../components/ui/GoalCard'
+import PortfolioAnalysis from '../components/ui/PortfolioAnalysis'
+import FinancialAdvisor from '../components/ui/FinancialAdvisor'
+import RealMarketCard from '../components/ui/RealMarketCard'
 
 export default function Home() {
 
@@ -69,6 +72,18 @@ const monthlySavings = 500
       <h1 className="text-4xl font-bold mb-6">
         Dashboard Financiero
       </h1>
+      
+      <div className="grid md:grid-cols-3 gap-4 mb-6">
+
+        <RealMarketCard symbol="VOO" />
+
+        <RealMarketCard symbol="SPY" />
+
+        <RealMarketCard symbol="BINANCE:BTCUSDT" />
+
+        <RealMarketCard symbol="YPF" />
+
+      </div>
 
       <div
         className="
@@ -138,6 +153,20 @@ const monthlySavings = 500
       </div>
       <div className="mb-6">
 
+        <PortfolioAnalysis
+          investments={investments}
+        />
+        <div className="mb-6">
+
+          <FinancialAdvisor
+            investments={investments}
+          />
+
+        </div>
+
+      </div>
+      <div className="mb-6">
+
   <GoalCard
     title="Fondo de Emergencia"
     current={currentSavings}
@@ -173,6 +202,7 @@ const monthlySavings = 500
             id={investment.id}
             title={investment.title}
             value={`${investment.amount} ${investment.currency}`}
+            category={investment.category}
             color="#4ade80"
             refreshInvestments={fetchInvestments}
           />

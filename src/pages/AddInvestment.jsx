@@ -7,6 +7,7 @@ export default function AddInvestment() {
   const [amount, setAmount] = useState('')
   const [currency, setCurrency] = useState('')
   const [platform, setPlatform] = useState('')
+  const [category, setCategory] = useState('')
 
   async function handleSubmit(e) {
 
@@ -19,7 +20,8 @@ export default function AddInvestment() {
           title,
           amount,
           currency,
-          platform
+          platform,
+          category
         }
       ])
 
@@ -35,9 +37,11 @@ export default function AddInvestment() {
     setAmount('')
     setCurrency('')
     setPlatform('')
+    setCategory('')
   }
 
   return (
+
     <div>
 
       <h1 className="text-3xl font-bold mb-6">
@@ -80,6 +84,42 @@ export default function AddInvestment() {
           onChange={(e) => setPlatform(e.target.value)}
           className="bg-slate-800 p-4 rounded-xl"
         />
+
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="bg-slate-800 p-4 rounded-xl"
+        >
+
+          <option value="">
+            Categoría
+          </option>
+
+          <option value="ETF">
+            ETF
+          </option>
+
+          <option value="Acción">
+            Acción
+          </option>
+
+          <option value="Cripto">
+            Cripto
+          </option>
+
+          <option value="Fondo">
+            Fondo
+          </option>
+
+          <option value="Cash">
+            Cash
+          </option>
+
+          <option value="CEDEAR">
+            CEDEAR
+          </option>
+
+        </select>
 
         <button
           className="

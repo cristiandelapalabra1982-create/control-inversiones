@@ -6,6 +6,7 @@ export default function InvestmentCard({
   id,
   title,
   value,
+  category,
   color,
   refreshInvestments
 }) {
@@ -98,7 +99,19 @@ export default function InvestmentCard({
             <p className="text-slate-300 mt-1">
               {value}
             </p>
-
+            <p
+              className="
+                inline-block
+                bg-slate-700
+                px-3
+                py-1
+                rounded-full
+                text-sm
+                mt-2
+              "
+            >
+              {category}
+            </p>
           </div>
 
           <div className="flex gap-2">
