@@ -1,60 +1,35 @@
- import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+ import { useEffect, useState } from 'react'
+import { supabase } from './lib/supabase'
 
 import Home from './pages/Home'
-import Investments from './pages/Investments'
-import Goals from './pages/Goals'
-import Profile from './pages/Profile'
-import AddInvestment from './pages/AddInvestment'
+import Login from './pages/Login'
 
-function App() {
-  return (
-    <BrowserRouter>
+export default function App() {
 
-      <div className="bg-slate-950 min-h-screen text-white pb-24">
+  const [session, setSession] = useState(null)
 
-        <div className="max-w-md mx-auto p-5">
+  useEffect(() => {
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/investments" element={<Investments />} />
-            <Route path="/goals" element={<Goals />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/add-investment" element={<AddInvestment />}
-            />
-          </Routes>
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        setSession(session)
+      })
 
-        </div>
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session)
+      }
+    )
 
-        <nav className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800">
+    return () => subscription.unsubscribe()
 
-          <div className="max-w-md mx-auto flex justify-around p-4">
+  }, [])
 
-            <Link to="/">Inicio</Link>
+  if (!session) {
+    return <Login />
+  }
 
-            <Link to="/investments">
-              Inversiones
-            </Link>
-
-            <Link to="/goals">
-              Objetivos
-            </Link>
-
-            <Link to="/profile">
-              Perfil
-            </Link>
-
-            <Link to="/add-investment">
-             Agregar
-            </Link>
-
-          </div>
-
-        </nav>
-
-      </div>
-
-    </BrowserRouter>
-  )
+  return <Home />
 }
-
-export default App
